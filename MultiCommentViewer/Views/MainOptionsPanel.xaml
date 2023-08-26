@@ -153,6 +153,13 @@
             <Label Content="列グリッド線の色" HorizontalAlignment="Left" Margin="53,834,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.422,2.154"/>
             <xctk:ColorPicker  SelectedColor="{Binding VerticalGridLineColor}" Margin="148,834,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" />
 
+            <GroupBox Header="翻訳" HorizontalAlignment="Left" Height="99" Margin="18,876,0,0" VerticalAlignment="Top" Width="336">
+                <Grid>
+                    <ComboBox SelectedIndex="{Binding translatorUnitIndex,Mode=TwoWay}" ItemsSource="{Binding translatorList ,Mode=OneWay}" DisplayMemberPath="Text" Margin="10,10,0,0" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Width="291" />
+                    <CheckBox IsChecked="{Binding alwaysUseTranslation,Mode=TwoWay}" Content="常に翻訳する" Margin="10,40,0,0" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.455,0.4" Visibility="Hidden" />
+
+                </Grid>
+            </GroupBox>
         </Grid>
     </ScrollViewer>
 </UserControl>

@@ -137,6 +137,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTubeLiveMessageParserIF"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouTubeLiveMessageParserTests", "YouTubeLiveMessageParser\YouTubeLiveSitePluginTests\YouTubeLiveMessageParserTests.csproj", "{8FD19D9D-DBDA-4015-9F2C-0166226ACD1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwiChaDashPlugin", "..\MultiCommentViewer-master\TwiChaDashPlugin\TwiChaDashPlugin.csproj", "{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Alpha|Any CPU = Alpha|Any CPU
@@ -641,6 +643,14 @@ Global
 		{8FD19D9D-DBDA-4015-9F2C-0166226ACD1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FD19D9D-DBDA-4015-9F2C-0166226ACD1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FD19D9D-DBDA-4015-9F2C-0166226ACD1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}.Alpha|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}.Alpha|Any CPU.Build.0 = Debug|Any CPU
+		{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}.Beta|Any CPU.ActiveCfg = Beta|Any CPU
+		{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}.Beta|Any CPU.Build.0 = Beta|Any CPU
+		{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5D99988-A4CE-4DAF-BD26-C4535E697BA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

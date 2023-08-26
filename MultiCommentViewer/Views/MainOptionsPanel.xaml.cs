@@ -582,6 +582,23 @@ namespace MultiCommentViewer
             set { ChangedOptions.PeriscopeForeColor = value; }
         }
 
+        public ObservableCollection<TextBlock> translatorList
+        {
+            get { return new ObservableCollection<TextBlock> { new TextBlock(){ Text= "みらい翻訳" },new TextBlock(){ Text= "ゆかコネNEO" }  }; }
+        }
+
+        public int translatorUnitIndex
+        {
+            get { return ChangedOptions.translatorUnitIndex; }
+            set { ChangedOptions.translatorUnitIndex = value; }
+        }
+
+        public bool alwaysUseTranslation
+        {
+            get { return ChangedOptions.alwaysUseTranslation; }
+            set { ChangedOptions.alwaysUseTranslation = value; }
+        }
+
         public IOptions OriginOptions { get; private set; }
         public IOptions ChangedOptions { get; private set; }
         public ObservableCollection<FontFamilyViewModel> FontFamillyCollection { get; private set; }

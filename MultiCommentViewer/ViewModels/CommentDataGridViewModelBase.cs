@@ -180,6 +180,17 @@ namespace MultiCommentViewer
             get { return _options.SelectedRowForeColor; }
             set { _options.SelectedRowForeColor = value; }
         }
+        public int translatorIndex
+        {
+            get { return _options.translatorUnitIndex; }
+            set { _options.translatorUnitIndex = value; }
+        }
+        public bool alwaysUseTranslattion
+        {
+            get { return _options.alwaysUseTranslation; }
+            set { _options.alwaysUseTranslation = value; }
+        }
+
         public IMcvCommentViewModel SelectedComment { get; set; }
         protected readonly IOptions _options;
         private ICollectionView _comments;
@@ -198,56 +209,114 @@ namespace MultiCommentViewer
             _dispatcher = Dispatcher.CurrentDispatcher;
             TranslateCommand = new RelayCommand(Translate);
         }
+        
         TexTra.TexTraTranslator translator = new TexTra.TexTraTranslator();
+        YNCNeo.YNCTNeoTranslate translator_ync = new YNCNeo.YNCTNeoTranslate();
+
         private async void Translate()
         {
             var selectedComment = SelectedComment;
-            if (selectedComment.IsTranslated)
+            if (selectedComment?.IsTranslated != false)
             {
                 return;
             }
             var text = selectedComment.MessageItems.ToText();
-            try
-            {
-                var a = await translator.Traslate(text, "rysestock", "1f9ea34966481b37424e659bcdfac50c05f770d82", "62f016b234031ca2cef2f904b9edcb6d");
-                if (!a.IsError)
-                {
-                    await _dispatcher.InvokeAsync(() =>
-                    {
-                        var list = new List<IMessagePart>(selectedComment.MessageItems)
-                        {
-                        Common.MessagePartFactory.CreateMessageText(Environment.NewLine + "(訳)" + a.Translated)
-                        };
-                        selectedComment.MessageItems = list;
-                    });
-                    selectedComment.IsTranslated = true;
-                }
-                else
-                {
-                    await _dispatcher.InvokeAsync(() =>
-                    {
-                        var list = new List<IMessagePart>(selectedComment.MessageItems)
-                        {
-                        Common.MessagePartFactory.CreateMessageText(Environment.NewLine + a.ErrorMessage)
-                        };
-                        selectedComment.MessageItems = list;
-                    });
-                }
-            }
-            catch (Exception ex)
+
+            if (translatorIndex == 0)
             {
                 try
                 {
-                    await _dispatcher.InvokeAsync(() =>
+                    var a = await translator.Traslate(text, "rysestock", "1f9ea34966481b37424e659bcdfac50c05f770d82", "62f016b234031ca2cef2f904b9edcb6d");
+                    if (!a.IsError)
                     {
-                        var list = new List<IMessagePart>(selectedComment.MessageItems)
+                        if (text.Trim() != a.Translated.Trim())
+                        {
+                            await _dispatcher.InvokeAsync(() =>
+                            {
+                                var list = new List<IMessagePart>(selectedComment.MessageItems)
+                            {
+                            Common.MessagePartFactory.CreateMessageText(Environment.NewLine + "(訳)" + a.Translated)
+                            };
+                                selectedComment.MessageItems = list;
+                            });
+                        }
+                        selectedComment.IsTranslated = true;
+                    }
+                    else
+                    {
+                        await _dispatcher.InvokeAsync(() =>
+                        {
+                            var list = new List<IMessagePart>(selectedComment.MessageItems)
+                            {
+                        Common.MessagePartFactory.CreateMessageText(Environment.NewLine + a.ErrorMessage)
+                            };
+                            selectedComment.MessageItems = list;
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        await _dispatcher.InvokeAsync(() =>
+                        {
+                            var list = new List<IMessagePart>(selectedComment.MessageItems)
+                                {
+                        Common.MessagePartFactory.CreateMessageText(Environment.NewLine + ex.Message)
+                                };
+                            selectedComment.MessageItems = list;
+                        });
+                    }
+                    catch { }
+                }
+            }
+            else
+            {
+                try
+                {
+                    var a = await translator_ync.Traslate(text);
+                    if (!a.IsError)
+                    {
+                        if (text.Trim() != a.Translated.Trim())
+                        {
+                            await _dispatcher.InvokeAsync(() =>
+                            {
+                                var list = new List<IMessagePart>(selectedComment.MessageItems)
+                            {
+                            Common.MessagePartFactory.CreateMessageText(Environment.NewLine + "(訳)" + a.Translated)
+                            };
+                                selectedComment.MessageItems = list;
+                            });
+                        }
+                        selectedComment.IsTranslated = true;
+                    }
+                    else
+                    {
+                        await _dispatcher.InvokeAsync(() =>
+                        {
+                            var list = new List<IMessagePart>(selectedComment.MessageItems)
+                        {
+                        Common.MessagePartFactory.CreateMessageText(Environment.NewLine + a.ErrorMessage)
+                        };
+                            selectedComment.MessageItems = list;
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        await _dispatcher.InvokeAsync(() =>
+                        {
+                            var list = new List<IMessagePart>(selectedComment.MessageItems)
                             {
                         Common.MessagePartFactory.CreateMessageText(Environment.NewLine + ex.Message)
                             };
-                        selectedComment.MessageItems = list;
-                    });
+                            selectedComment.MessageItems = list;
+                        });
+                    }
+                    catch { }
                 }
-                catch { }
             }
         }
     }

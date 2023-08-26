@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Diagnostics;
 using SitePlugin;
 using Common;
+using System.Collections.ObjectModel;
+
 namespace MultiCommentViewer.Test
 {
     class DynamicOptionsTest : DynamicOptionsBase, IOptions
@@ -226,6 +228,8 @@ namespace MultiCommentViewer.Test
         public Color PeriscopeForeColor { get => GetValue(); set => SetValue(value); }
         public Color ShowRoomBackColor { get => GetValue(); set => SetValue(value); }
         public Color ShowRoomForeColor { get => GetValue(); set => SetValue(value); }
+        public int translatorUnitIndex { get => GetValue(); set => SetValue(value); }
+        public bool alwaysUseTranslation { get => GetValue(); set => SetValue(value); }
 
         protected override void Init()
         {
@@ -446,6 +450,9 @@ namespace MultiCommentViewer.Test
             Dict.Add(nameof(PeriscopeForeColor), new Item { DefaultValue = ColorFromArgb("#FF008080"), Predicate = c => true, Serializer = c => ColorToArgb(c), Deserializer = s => ColorFromArgb(s) });
             Dict.Add(nameof(ShowRoomBackColor), new Item { DefaultValue = ColorFromArgb("#FFFA8072"), Predicate = c => true, Serializer = c => ColorToArgb(c), Deserializer = s => ColorFromArgb(s) });
             Dict.Add(nameof(ShowRoomForeColor), new Item { DefaultValue = ColorFromArgb("#FF008080"), Predicate = c => true, Serializer = c => ColorToArgb(c), Deserializer = s => ColorFromArgb(s) });
+
+            Dict.Add(nameof(alwaysUseTranslation), new Item { DefaultValue = false, Predicate = b => true, Serializer = b => b.ToString(), Deserializer = s => bool.Parse(s) });
+            Dict.Add(nameof(translatorUnitIndex), new Item { DefaultValue = 0, Predicate = n => n >= 0, Serializer = n => n.ToString(), Deserializer = s => int.Parse(s) });
         }
         public ICommentOptions Clone()
         {

@@ -194,6 +194,9 @@ namespace MultiCommentViewer
         double ConnectionsViewConnectionBackgroundWidth { get; set; }
         int ConnectionsViewConnectionForegroundDisplayIndex { get; set; }
         double ConnectionsViewConnectionForegroundWidth { get; set; }
+        int translatorUnitIndex { get; set; }
+        bool alwaysUseTranslation { get; set; }
+
     }
     /// <summary>
     ///
