@@ -42,7 +42,7 @@ namespace NicoSitePlugin
                 return;
             }
             _isFirstConnection = true;
-        reload:
+reload:
             _isDisconnectedExpected = false;
             _disconnectCts = new CancellationTokenSource();
             try
@@ -83,7 +83,7 @@ namespace NicoSitePlugin
         }
         private async Task<string> GetChannelLiveId(ChannelUrl channelUrl)
         {
-        check:
+check:
             var currentLiveId = await Api.GetCurrentChannelLiveId(_server, channelUrl.ChannelScreenName);
             if (currentLiveId != null)
             {
@@ -101,7 +101,7 @@ namespace NicoSitePlugin
         }
         private async Task<string> GetCommunityLiveId(CommunityUrl communityUrl, CookieContainer cc)
         {
-        check:
+check:
             var currentLiveId = await Api.GetCurrentCommunityLiveId(_server, communityUrl.CommunityId, cc);
             if (currentLiveId != null)
             {
@@ -135,7 +135,7 @@ namespace NicoSitePlugin
             {
                 vid = await GetCommunityLiveId(communityUrl, cc);
             }
-            else if(input is LiveId liveId)
+            else if (input is LiveId liveId)
             {
                 vid = liveId.Raw;
             }
@@ -273,6 +273,15 @@ namespace NicoSitePlugin
             throw new NotImplementedException();
         }
         private const string SystemUserId = "900000000";
+        private static string? GetThumbnail(string userId)
+        {
+            if (long.TryParse(userId, out var userIdNum))
+            {
+                var k = userIdNum / 10000;
+                return $"https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/{k}/{userId}.jpg";
+            }
+            return null;
+        }
         private async Task ProcessChatMessageAsync(Chat.IChatMessage message)
         {
             switch (message)
@@ -297,6 +306,7 @@ namespace NicoSitePlugin
                             _userCommentCountDict.AddOrUpdate(userId, 1, (s, n) => n);
                             isFirstComment = true;
                         }
+                        var thumbNailUrl = GetThumbnail(userId);
                         //var comment = await Tools.CreateNicoComment(chat, user, _siteOptions, roomName, async userid => await API.GetUserInfo(_dataSource, userid), _logger);
                         INicoMessage comment;
                         INicoMessageMetadata metadata;
@@ -417,17 +427,6 @@ namespace NicoSitePlugin
                             {
                                 _chatProvider?.Disconnect();
                             }
-                            string username;
-                            if (IsRawUserId(chat.UserId) && chat.UserId != SystemUserId && _siteOptions.IsAutoGetUsername)
-                            {
-                                var userInfo = await Api.GetUserInfo(_server, _cc, chat.UserId);
-                                username = userInfo.Nickname;
-                                user.Name = Common.MessagePartFactory.CreateMessageItems(username);
-                            }
-                            else
-                            {
-                                username = null;
-                            }
                             if (_siteOptions.IsAutoSetNickname)
                             {
                                 var nick = SitePluginCommon.Utils.ExtractNickname(chat.Content);
@@ -444,7 +443,8 @@ namespace NicoSitePlugin
                                 PostedAt = Common.UnixTimeConverter.FromUnixTime(chat.Date),
                                 Text = chat.Content,
                                 UserId = chat.UserId,
-                                UserName = username,
+                                UserName = chat.Name,
+                                ThumbnailUrl = thumbNailUrl,
                             };
                             comment = abc;
                             metadata = new CommentMessageMetadata(abc, _options, _siteOptions, user, this, isFirstComment)
